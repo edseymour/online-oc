@@ -5,7 +5,7 @@ var cc       = require('config-multipaas'),
     fs = require('fs'),
     serveStatic       = require("serve-static");
 
-var oc = require('modules/oc')
+var oc = require('./modules/oc')
 
 var config   = cc();
 var app      = Router()
