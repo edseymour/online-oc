@@ -27,7 +27,7 @@ function home_page(req,res) {
   res.end(index.toString())
 }
 
-app.get("/", home_page(req,res))
+app.get("/", home_page )
 
 app.post("/", function(req,res) {
   oc.run_command(req.params.command)
