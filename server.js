@@ -5,6 +5,8 @@ var cc       = require('config-multipaas'),
     fs = require('fs'),
     serveStatic       = require("serve-static");
 
+var oc = require('modules/oc')
+
 var config   = cc();
 var app      = Router()
 
@@ -16,11 +18,20 @@ app.get("/status", function(req,res) {
   res.end("{status: 'ok'}\n")
 })
 
-app.get("/", function(req,res) {
+
+home_page: function(req,res) {
   var index = fs.readFileSync(__dirname + '/index.html')
   res.statusCode = 200
   res.setHeader('Content-Type','text/html; charset=utf-8')
   res.end(index.toString())
+}
+
+app.get("/", home_page(req,res)
+
+app.post("/", function(req,res) {
+  oc.run_command(req.params.command)
+  home_page(req,res)
+
 })
 
 var server = http.createServer(function (req, res) {
