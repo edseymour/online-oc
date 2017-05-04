@@ -37,15 +37,17 @@ api.get("/", home_page )
 
 api.post("/", function(req,res) {
 
-  if (req.body.value) {
-    console.log("body value not null")
+  if (req.body.command) {
+    var ret = oc.run_command(req.body.command)
+
+    res.statusCode = 200
+    res.setHeader('Content-Type','text/html; charset=utf-8')
+    res.end("<html><head><title>Online OC</title></head><body><code>"+ret+'</code><a href="/">Again</a></body></html>')
 
   } else {
     console.log("body value null")
+    home_page(req,res)
   }
-
-  // oc.run_command(req.body.command)
-  home_page(req,res)
 
 })
 
