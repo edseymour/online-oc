@@ -41,18 +41,19 @@ api.post("/", function(req,res) {
     res.statusCode = 200
     res.setHeader('Content-Type','text/html; charset=utf-8')
 
-    res.write("<html><head><title>Online OC</title></head><body>")
+    var body = "<html><head><title>Online OC</title></head><body>"
     var ret = oc.run_command(req.body.command,function(err,out,err){
 
-      res.write("<h1>Response</h1>")
-      res.write("<code>" + out + "</code>")
-      res.write("<h3>Info</h3>")
-      res.write("<code>" + err + "</code>")
-      res.write("<br />")
+      body += "<h1>Response</h1><code>"
+      body += out 
+      body += "</code><h3>Info</h3><code>"
+      body += err
+      body += "</code><br />"
 
     })
 
-    res.end('<a href="/">Again</a></body></html>')
+    res.end(body + '<a href="/">Again</a></body></html>')
+    
 
   } else {
     console.log("body value null")
