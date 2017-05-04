@@ -42,7 +42,11 @@ api.post("/", function(req,res) {
     res.setHeader('Content-Type','text/html; charset=utf-8')
 
     var body = "<html><head><title>Online OC</title></head><body>"
-    var ret = oc.run_command(req.body.command,function(err,out,err){
+    var ret = oc.run_command(req.body.command,function(error,out,err){
+      
+      console.log("stdout: ",out)
+      console.log("stderr: ",err)
+      if (error) { console.log("An error occurred: ",error) }
 
       body += "<h1>Response</h1><code>"
       body += out 
