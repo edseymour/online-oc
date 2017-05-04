@@ -19,14 +19,15 @@ app.get("/status", function(req,res) {
 })
 
 
-home_page: function(req,res) {
+function home_page(req,res) {
+  
   var index = fs.readFileSync(__dirname + '/index.html')
   res.statusCode = 200
   res.setHeader('Content-Type','text/html; charset=utf-8')
   res.end(index.toString())
 }
 
-app.get("/", home_page(req,res)
+app.get("/", home_page(req,res))
 
 app.post("/", function(req,res) {
   oc.run_command(req.params.command)
