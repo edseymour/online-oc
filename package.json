@@ -1,0 +1,26 @@
+{
+  "name": "online-oc",
+  "description": "An online version of the OpenShift command line tool",
+  "version": "0.0.1",
+  "private": false,
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "dependencies": {
+    "config-multipaas": "^0.2.2",
+    "router": "^1.1.4",
+    "send": "^0.13.2",
+    "serve-static": "^1.10.2",
+    "finalhandler": "^0.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://gogs-fabric8.apps.home/ed/online-oc.git"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "main": "server.js"
+}
