@@ -2,6 +2,7 @@ var cc       = require('config-multipaas'),
     finalhandler= require('finalhandler'),
     http     = require("http"),
     Router       = require('router'),
+    bodyParser   = require('body-parser'),
     fs = require('fs'),
     serveStatic       = require("serve-static");
 
@@ -27,11 +28,21 @@ function home_page(req,res) {
   res.end(index.toString())
 }
 
-app.get("/", home_page )
+var api = Router()
+app.use('/', api)
 
-app.post("/", function(req,res) {
+api.use(bodyParser.urlencoded())
 
-  console.log('params: '.req.params)
+api.get("/", home_page )
+
+api.post("/", function(req,res) {
+
+  if (req.body.value) {
+    console.log("body value not null")
+
+  } else {
+    console.log("body value null")
+  }
 
   // oc.run_command(req.body.command)
   home_page(req,res)
