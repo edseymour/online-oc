@@ -19,7 +19,7 @@ app.get("/status", function(req,res) {
 app.get("/", function(req,res) {
   var index = fs.readFileSync(__dirname + '/index.html')
   res.statusCode = 200
-  res.setHeader('Content-Type','application/json; charset=utf-8')
+  res.setHeader('Content-Type','text/html; charset=utf-8')
   res.end(index.toString())
 })
 
