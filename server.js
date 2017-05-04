@@ -1,5 +1,6 @@
 var cc       = require('config-multipaas'),
     finalhandler= require('finalhandler'),
+    bodyParser = require('body-parser'),
     http     = require("http"),
     Router       = require('router'),
     fs = require('fs'),
@@ -11,6 +12,7 @@ var config   = cc();
 var app      = Router()
 
 app.use(serveStatic('static'))
+app.use(bodyParser.urlencoded({extended: false}))
 
 app.get("/status", function(req,res) {
   res.statusCode = 200
@@ -30,7 +32,7 @@ function home_page(req,res) {
 app.get("/", home_page )
 
 app.post("/", function(req,res) {
-  oc.run_command(req.params.command)
+  oc.run_command(req.body.command)
   home_page(req,res)
 
 })
