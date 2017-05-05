@@ -1,10 +1,10 @@
 <% include header %>
 
 <%
-for (var i=0;i<history.length;i++) { %>
+for (var hist in history) { %>
 
-<code>oc&nbsp;<%=history[i][command]%></code>
-<code><%=history[i][stdout]%></code>
+<code>oc&nbsp;<%=history[hist][command]%></code>
+<code><%=history[hist][stdout]%></code>
 
 <%
 }
