@@ -63,6 +63,7 @@ api.post("/", function(req,res) {
         callback(method_error,out_msg + " " + err_msg)
       },
       function(callback) {
+        console.log("here")
         res.statusCode = 200
         res.setHeader('Content-Type','text/html; charset=utf-8')
 
@@ -81,6 +82,7 @@ api.post("/", function(req,res) {
       }
     ],
     function(err,results) {
+
       if (err) { console.log("ERROR: ",err) }
       else {
         console.log("command: ",results[0])
