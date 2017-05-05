@@ -24,12 +24,12 @@ app.use('/public', express.static('public'))
 app.use(bodyParser.urlencoded( {extended: true}))
 app.use(bodyParser.json())
 
-api.get("/", function(req,res){
+app.get("/", function(req,res){
   res.render('index', { command: null, history: oc_responses });
 })
 
 
-api.post("/", function(req,res) {
+app.post("/", function(req,res) {
 
   if (req.body.command) {
 
