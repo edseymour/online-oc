@@ -1,0 +1,13 @@
+<% include header %>
+
+<%
+for (var i=0;i<history.length;i++) { %>
+
+<code>oc&nbsp;<%=history[i][command]%></code>
+<code><%=history[i][stdout]%></code>
+
+<%
+}
+%>
+
+<% include footer %>
