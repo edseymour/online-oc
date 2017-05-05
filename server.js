@@ -47,7 +47,8 @@ api.post("/", function(req,res) {
     async.series([
 
       // call oc commandline
-      function() {
+      function(callback) {
+        var method_error;
         oc.run_command(req.body.command,function(error,out,err) {
 
             console.log("stdout: ",out)
@@ -56,9 +57,12 @@ api.post("/", function(req,res) {
 
             err_msg = err
             out_msg = out
+            method_error = error
         });
+
+        callback(method_error,out_msg + " " + err_msg)
       },
-      function() {
+      function(callback) {
         res.statusCode = 200
         res.setHeader('Content-Type','text/html; charset=utf-8')
 
@@ -69,9 +73,20 @@ api.post("/", function(req,res) {
         body += err
         body += "</code><br /><a href="/">Again</a></body></html>"
 
+        console.log("rendering: ",body)
+
         res.end(body)
+
+        callback(null,body)
       }
-    ]);
+    ],
+    function(err,results) {
+      if (err) { console.log("ERROR: ",err) }
+      else {
+        console.log("command: ",results[0])
+        console.log("render: ",results[1])
+      }
+    });
 
   } else {
     console.log("body value null")
