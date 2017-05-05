@@ -39,17 +39,17 @@
         <div class="row">
             <p>Enter a command, or type --help for assistance</p>
           <form method="post" action="search"><tt>oc&nbsp;</tt>
-            <% if(pattern) { %>
+            <% if(command) { %>
             <input type="text"
                      class="col-md-12"
-                     name="pattern"
+                     name="command"
                      placeholder="enter command and press Enter"
-                     value="<%= pattern %>"
+                     value="<%= command %>"
                      />
            <% } else { %>
            <input type="text"
                      class="col-md-12"
-                     name="pattern"
+                     name="command"
                      placeholder="enter command and press Enter" />
            <% } %>
           </form>
