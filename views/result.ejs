@@ -2,9 +2,10 @@
 
 <%
 for (var hist in history) { %>
-
+<p><%=hist %>
 <code>oc&nbsp;<%=history[hist][command]%></code>
-<code><%=history[hist][stdout]%></code>
+<code><%=history[hist].stdout%></code>
+</p>
 
 <%
 }
