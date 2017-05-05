@@ -40,6 +40,8 @@ app.post("/", function(req,res) {
 
       oc_responses[oc_histnum] = { "command" : req.body.command, "error" : error, "stdout" : out, "stderr" : err }
       oc_histnum++
+
+      console.log(oc_responses)
     });
 
 
