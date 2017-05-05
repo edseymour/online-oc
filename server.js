@@ -24,7 +24,7 @@ app.use('/public', express.static('public'))
 app.use(bodyParser.urlencoded( {extended: true}))
 app.use(bodyParser.json())
 
-api.get("/", (req,res) => {
+api.get("/", function(req,res){
   res.render('index', { command: null, history: oc_responses });
 })
 
