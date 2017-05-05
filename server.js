@@ -1,19 +1,15 @@
 var cc       = require('config-multipaas'),
-    finalhandler= require('finalhandler'),
     http     = require("http"),
     express      = require('express'),
-    Router       = require('router'),
-    async = require('async'),
-    bodyParser   = require('body-parser'),
-    fs = require('fs'),
-    serveStatic       = require("serve-static");
+    bodyParser   = require('body-parser')
 
 var oc = require('./modules/oc')
 
 var config   = cc();
-var app      = Router()
+var app      = express();
 
-app.use(serveStatic('static'))
+oc_responses =  {};
+oc_histnum = 0;
 
 app.get("/status", function(req,res) {
   res.statusCode = 200
@@ -21,87 +17,40 @@ app.get("/status", function(req,res) {
   res.end("{status: 'ok'}\n")
 })
 
+app.set('view engine','ejs')
+app.set('view options', { layout: false })
+app.use('/public', express.static('public'))
 
-function home_page(req,res) {
-  
-  var index = fs.readFileSync(__dirname + '/index.html')
-  res.statusCode = 200
-  res.setHeader('Content-Type','text/html; charset=utf-8')
-  res.end(index.toString())
-}
+app.use(bodyParser.urlencoded( {extended: true}))
+app.use(bodyParser.json())
 
-var api = Router()
-app.use('/', api)
+api.get("/", (req,res) => {
+  res.render('index', { command: null, history: oc_responses });
+})
 
-api.use(bodyParser.urlencoded())
-
-api.get("/", home_page )
 
 api.post("/", function(req,res) {
 
   if (req.body.command) {
 
-    var err_msg;
-    var out_msg;
+    oc.run_command(req.body.command,function(error,out,err) {
 
-    async.series([
+      console.log("stdout: ",out)
+      console.log("stderr: ",err)
+      if (error) { console.log("An error occurred: ",error) }
 
-      // call oc commandline
-      function(callback) {
-        var method_error;
-        oc.run_command(req.body.command,function(error,out,err) {
-
-            console.log("stdout: ",out)
-            console.log("stderr: ",err)
-            if (error) { console.log("An error occurred: ",error) }
-
-            err_msg = err
-            out_msg = out
-            method_error = error
-        });
-
-        callback(method_error,out_msg + " " + err_msg)
-      },
-      function(callback) {
-        console.log("here")
-        res.statusCode = 200
-        res.setHeader('Content-Type','text/html; charset=utf-8')
-
-        var body = "<html><head><title>Online OC</title></head><body>"
-        body += "<h1>Response</h1><code>"
-        body += out
-        body += "</code><h3>Info</h3><code>"
-        body += err
-        body += "</code><br /><a href="/">Again</a></body></html>"
-
-        console.log("rendering: ",body)
-
-        res.end(body)
-
-        callback(null,body)
-      }
-    ],
-    function(err,results) {
-
-      if (err) { console.log("ERROR: ",err) }
-      else {
-        console.log("command: ",results[0])
-        console.log("render: ",results[1])
-      }
+      oc_responses[oc_histnum] = { "command" : req.body.command, "error" : error, "stdout" : out, "stderr" : err }
+      oc_histnum++
     });
+
 
   } else {
     console.log("body value null")
-    home_page(req,res)
   }
+
+  res.render('result',{ command: req.body.command, history: oc_responses } )
 
 })
 
-var server = http.createServer(function (req, res) {
-  var done = finalhandler(req, res)
-  app(req, res, done)
-});
+app.listen( config.get('PORT') || 8080 )
 
-server.listen(config.get('PORT'),config.get('IP'),function() {
-  console.log( "Listening on " + config.get('IP') +":" + config.get('PORT') )
-});
