@@ -61,6 +61,8 @@ api.post("/", function(req,res) {
     }
 
     oc.run_command(req.body.command,collect_result)
+    
+    console.log("body var is: " + body)
       
     res.end(body + '<a href="/">Again</a></body></html>')
     
