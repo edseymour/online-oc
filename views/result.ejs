@@ -4,7 +4,7 @@
 for (var hist in history) { %>
 <p><tt><%=hist %></tt>
 <code>oc&nbsp;<%=history[hist].command%></code><br />
-<code><%=history[hist].stdout.replace('\n','<br />')%></code>
+<tt><%=history[hist].stdout.replace('\n','<br />')%></tt>
 </p>
 
 <%
