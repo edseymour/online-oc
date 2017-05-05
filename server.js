@@ -1,7 +1,8 @@
 var cc       = require('config-multipaas'),
     finalhandler= require('finalhandler'),
     http     = require("http"),
-    Router       = require('router'),
+    express      = require('express'),
+    async = require('async'),
     bodyParser   = require('body-parser'),
     fs = require('fs'),
     serveStatic       = require("serve-static");
@@ -38,34 +39,38 @@ api.get("/", home_page )
 api.post("/", function(req,res) {
 
   if (req.body.command) {
-    res.statusCode = 200
-    res.setHeader('Content-Type','text/html; charset=utf-8')
 
-    var body = "<html><head><title>Online OC</title></head><body>"
+    var err_msg;
+    var out_msg;
 
-    function collect_result(error,out,err) {
+    async.series([
 
-      console.log("stdout: ",out)
-      console.log("stderr: ",err)
-      if (error) { console.log("An error occurred: ",error) }
+      // call oc commandline
+      function() {
+        oc.run_command(req.body.command,function(error,out,err) {
 
-      console.log("body var is: " + body)
+            console.log("stdout: ",out)
+            console.log("stderr: ",err)
+            if (error) { console.log("An error occurred: ",error) }
 
-      body += "<h1>Response</h1><code>"
-      body += out
-      body += "</code><h3>Info</h3><code>"
-      body += err
-      body += "</code><br />"
+            err_msg = err
+            out_msg = out
+        });
+      },
+      function() {
+        res.statusCode = 200
+        res.setHeader('Content-Type','text/html; charset=utf-8')
 
-      console.log("body var is: " + body)
-    }
+        var body = "<html><head><title>Online OC</title></head><body>"
+        body += "<h1>Response</h1><code>"
+        body += out
+        body += "</code><h3>Info</h3><code>"
+        body += err
+        body += "</code><br /><a href="/">Again</a></body></html>"
 
-    oc.run_command(req.body.command,collect_result)
-    
-    console.log("body var is: " + body)
-      
-    res.end(body + '<a href="/">Again</a></body></html>')
-    
+        res.end(body)
+      }
+    ]);
 
   } else {
     console.log("body value null")
