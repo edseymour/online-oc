@@ -30,6 +30,8 @@ app.get("/", function(req,res){
 
 app.get("/history", function(req,res) {
 
+  res.statusCode = 200
+  res.setHeader('Content-Type','application/json; charset=utf-8')
   res.end( JSON.stringify(oc_responses) ); 
 
 })
