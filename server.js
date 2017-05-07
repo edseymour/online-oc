@@ -30,7 +30,7 @@ app.get("/", function(req,res){
 
 app.get("/history", function(req,res) {
 
-  res.end( oc_responses ); 
+  res.end( JSON.stringify(oc_responses) ); 
 
 })
 
