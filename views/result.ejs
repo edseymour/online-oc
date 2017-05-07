@@ -8,7 +8,7 @@ function getResults() {
   $.ajax({
     url: "/history",
     success: function( result ) {
-      $( "#latest" ).html( "<code>oc " + result[latest].command+ "<code><br/><code style='white-space:pre'>" + result[latest].stdout + "</code>" );
+      $( "#latest" ).html( "<code>oc " + result["latest"].command+ "<code><br/><code style='white-space:pre'>" + result["latest"].stdout + "</code>" );
     }
   });
 }
