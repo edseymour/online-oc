@@ -2,15 +2,16 @@
 
 <script type="text/javascript">
 
-var timer = $.timer(function() {
-$.ajax({
-  url: "/history",
-  success: function( result ) {
-    $( "#latest" ).html( "<code>oc " + result[latest].command+ "<code><br/><code style='white-space:pre'>" + result[latest].stdout + "</code>" );
-      }
+$(document).ready(function() { setInterval(getResults, 5000); }
+
+function getResults() {
+  $.ajax({
+    url: "/history",
+    success: function( result ) {
+      $( "#latest" ).html( "<code>oc " + result[latest].command+ "<code><br/><code style='white-space:pre'>" + result[latest].stdout + "</code>" );
     }
-  }
-}) },5000);
+  });
+}
 
 </script>
 
