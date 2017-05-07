@@ -6,13 +6,7 @@ var timer = $.timer(function() {
 $.ajax({
   url: "/history",
   success: function( result ) {
-    $( "#latest" ).html( "<strong>" + result[latest] + "</strong>" );
-    for (var hist in result) {
-      if (hist != "latest") { %>
-<p><tt><%=hist %></tt>
-<code>oc&nbsp;<%=history[hist].command%></code><br />
-<tt style="white-space:pre"><%=history[hist].stdout</tt>
-<%
+    $( "#latest" ).html( "<code>oc " + result[latest].command+ "<code><br/><code style='white-space:pre'>" + result[latest].stdout + "</code>" );
       }
     }
   }
