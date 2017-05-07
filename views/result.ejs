@@ -1,14 +1,23 @@
 <% include header %>
 
-<%
-for (var hist in history) { %>
+<script type="text/javascript">
+
+var timer = $.timer(function() {
+$.ajax({
+  url: "/history",
+  success: function( result ) {
+    $( "#latest" ).html( "<strong>" + result[latest] + "</strong>" );
+    for (var hist in result) {
+      if (hist != "latest") { %>
 <p><tt><%=hist %></tt>
 <code>oc&nbsp;<%=history[hist].command%></code><br />
-<tt><%=history[hist].stdout.replace('\n','<br />')%></tt>
-</p>
-
+<tt style="white-space:pre"><%=history[hist].stdout</tt>
 <%
-}
-%>
+      }
+    }
+  }
+}) },5000);
+
+</script>
 
 <% include footer %>

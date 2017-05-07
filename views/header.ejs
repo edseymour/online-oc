@@ -17,7 +17,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Word Finder</a>
+          <a class="navbar-brand" href="/">Online OpenShift Command Line</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -39,19 +39,10 @@
         <div class="row">
             <p>Enter a command, or type --help for assistance</p>
           <form method="post" action=""><tt>oc&nbsp;</tt>
-            <% if(command) { %>
-            <input type="text"
-                     class="col-md-12"
-                     name="command"
-                     placeholder="enter command and press Enter"
-                     value="<%= command %>"
-                     />
-           <% } else { %>
            <input type="text"
                      class="col-md-12"
                      name="command"
                      placeholder="enter command and press Enter" />
-           <% } %>
           </form>
         </div>
         <hr/>

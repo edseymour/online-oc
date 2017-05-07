@@ -28,6 +28,12 @@ app.get("/", function(req,res){
 })
 
 
+app.get("/history", function(req,res) {
+
+  res.end( oc_responses ); 
+
+})
+
 app.post("/", function(req,res) {
 
   if (req.body.command) {
@@ -38,7 +44,10 @@ app.post("/", function(req,res) {
       console.log("stderr: ",err)
       if (error) { console.log("An error occurred: ",error) }
 
-      oc_responses[oc_histnum] = { "command" : req.body.command, "error" : error, "stdout" : out, "stderr" : err }
+      var result = { "command" : req.body.command, "error" : error, "stdout" : out, "stderr" : err }
+ 
+      oc_responses['latest'] = result 
+      oc_responses[oc_histnum] = result 
       oc_histnum++
 
       console.log(oc_responses)
@@ -49,7 +58,7 @@ app.post("/", function(req,res) {
     console.log("body value null")
   }
 
-  res.render('result',{ command: req.body.command, history: oc_responses } )
+  res.render('result')
 
 })
 
