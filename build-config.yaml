@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: gottyforocp
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: gottyforocp
+    name: gottyforocp
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      pushSecret:
+        name: dockerio
+      to:
+        kind: DockerImage
+        name: docker.io/edseymour/gottyforocp:v3.7
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      dockerfile: "FROM fedora\n\nUSER 0\n\nENV OCREL=https://github.com/openshift/origin/releases/download/v3.7.1/openshift-origin-client-tools-v3.7.1-ab0f056-linux-64bit.tar.gz\nENV
+        GOPATH=/go\n\n# Install OC client tool\nRUN  curl -L --silent -o oc.tar.gz
+        $OCREL && ls -l && \\\n     yum install -y tar gzip findutils && \\\n     mkdir
+        /tmp/oc && \\\n     tar -xvf oc.tar.gz -C /tmp/oc && \\\n     find /tmp/oc
+        -name \"oc\" -type f -exec mv {} /usr/bin \\; && \\\n     rm -rf /tmp/oc oc.tar.gz
+        && \\\n     yum clean all \n\n# Install Gotty\nRUN  mkdir /go && chmod 755
+        /go && yum install -y git golang-bin && go get github.com/yudai/gotty && yum
+        clean all && mkdir /workspace && chmod 777 workspace\n\nWORKDIR /workspace\n\nEXPOSE
+        8080\n\nUSER 1001\n\nENTRYPOINT [\"/go/bin/gotty\"]\nCMD [\"-w\",\"bash\"]\n"
+      type: Dockerfile
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: fedora:latest
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: E8dgDpA87vjGZO0F8i-R
+      type: GitHub
+    - generic:
+        secret: EFGCchO_UuQlCDRKgiDx
+      type: Generic
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+      openshift.io/image.dockerRepositoryCheck: 2018-03-01T16:36:39Z
+    creationTimestamp: null
+    generation: 2
+    labels:
+      build: gottyforocp
+    name: fedora
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: fedora
+      from:
+        kind: DockerImage
+        name: 172.30.238.57:5000/online-oc/fedora:latest
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    generation: 1
+    labels:
+      build: gottyforocp
+    name: gottyforocp
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: 172.30.238.57:5000/online-oc/gottyforocp:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
+  status:
+    dockerImageRepository: ""
