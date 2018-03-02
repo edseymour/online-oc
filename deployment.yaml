@@ -8,7 +8,6 @@ objects:
   kind: ImageStream
   metadata:
     annotations:
-      openshift.io/generated-by: OpenShiftNewApp
       openshift.io/image.dockerRepositoryCheck: 2018-03-01T16:38:17Z
     creationTimestamp: null
     generation: 2
@@ -41,7 +40,6 @@ objects:
   kind: DeploymentConfig
   metadata:
     annotations:
-      openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     generation: 1
     name: online-oc
@@ -63,7 +61,6 @@ objects:
     template:
       metadata:
         annotations:
-          openshift.io/generated-by: OpenShiftNewApp
         creationTimestamp: null
         labels:
           deploymentconfig: online-oc
@@ -78,7 +75,7 @@ objects:
           args:
           - --https-address=:8443
           - --provider=openshift
-          - --openshift-service-account=proxy
+          - --openshift-service-account=online-oc
           - --upstream=http://localhost:8080
           - --tls-cert=/etc/tls/private/tls.crt
           - --tls-key=/etc/tls/private/tls.key
