@@ -74,7 +74,10 @@ objects:
           deploymentconfig: online-oc
       spec:
         containers:
-        - image: ''
+        - env:
+          - name: HOME
+            value: /workspace
+          image: ''
           imagePullPolicy: Always
           name: online-oc
           ports:
